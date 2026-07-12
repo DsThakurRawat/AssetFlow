@@ -103,8 +103,8 @@ export default function ResourceBooking() {
     }
 
     // Build ISO timestamps for time_range bounds [)
-    const startIso = `${bookingDate}T${startTime}:00Z`;
-    const endIso = `${bookingDate}T${endTime}:00Z`;
+    const startIso = new Date(bookingDate + "T" + startTime).toISOString();
+    const endIso = new Date(bookingDate + "T" + endTime).toISOString();
 
     if (new Date(startIso) >= new Date(endIso)) {
       setBookingFeedback({ type: "error", message: "End time must be after start time." });
