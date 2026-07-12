@@ -1,11 +1,14 @@
+import logging
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from psycopg import Connection
 from psycopg.rows import dict_row
+from psycopg.errors import UniqueViolation, ForeignKeyViolation
 from server.app.core.database import get_db
 from server.app.core.dependencies import require_roles, get_current_user
 from server.app.schemas import AssetCreate, AssetResponse
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/assets", tags=["Assets"])
 
 @router.get("", response_model=List[AssetResponse])
@@ -139,11 +142,27 @@ def create_asset(
                 (asset["id"],)
             )
             return cur.fetchone()
-    except Exception as e:
+    except UniqueViolation:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="An asset with this serial number already exists."
+        )
+    except ForeignKeyViolation:
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Failed to register asset: {str(e)}"
+            detail="The referenced category does not exist."
+        )
+    except HTTPException:
+        raise
+    except Exception:
+        # Log the real error server-side; never leak internal/schema details to the client.
+        db.rollback()
+        logger.exception("Failed to register asset")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Failed to register asset. Please check the submitted values."
         )
 
 @router.get("/{id}")

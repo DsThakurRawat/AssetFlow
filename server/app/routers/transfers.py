@@ -211,6 +211,14 @@ def decide_transfer_request(
             )
             new_alloc_id = cur.fetchone()["id"]
 
+            # Keep the denormalized asset status consistent with the new active
+            # allocation (it should already be 'allocated', but a prior return or
+            # status flip could have left it stale).
+            cur.execute(
+                "UPDATE assets SET status = 'allocated' WHERE id = %s AND status <> 'allocated'",
+                (transfer["asset_id"],)
+            )
+
             # Update transfer status to completed (or approved, we use 'completed' as defined in schema)
             cur.execute(
                 """

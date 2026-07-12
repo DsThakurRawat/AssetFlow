@@ -148,7 +148,7 @@ export default function Dashboard() {
           <LoadingState message="Loading activity…" />
         ) : activity.isError ? (
           <ErrorState message="Could not load activity" onRetry={() => activity.refetch()} />
-        ) : !activity.data?.length ? (
+        ) : !Array.isArray(activity.data) || activity.data.length === 0 ? (
           <div style={{
             padding: '24px 0',
             textAlign: 'center',

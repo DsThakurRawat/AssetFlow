@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 import {
   departmentsAPI, categoriesAPI, usersAPI,
-  type Department, type User,
+  type Department, type User, type Category,
 } from '../lib/api'
 import { useAuth } from '../lib/auth'
 import PillTabs from '../components/PillTabs'
@@ -303,6 +303,8 @@ function AddDepartmentForm({
 function CategoriesTab({ showAdd, onCloseAdd }: { showAdd: boolean; onCloseAdd: () => void }) {
   const queryClient = useQueryClient()
   const [formError, setFormError] = useState('')
+  const [editCat, setEditCat] = useState<Category | null>(null)
+  const [editError, setEditError] = useState('')
 
   const cats = useQuery({
     queryKey: ['categories'],
@@ -322,6 +324,19 @@ function CategoriesTab({ showAdd, onCloseAdd }: { showAdd: boolean; onCloseAdd: 
     },
   })
 
+  const updateMut = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: { name: string; warranty_months?: number | null } }) =>
+      categoriesAPI.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['categories'] })
+      setEditCat(null)
+      setEditError('')
+    },
+    onError: (err) => {
+      if (isAxiosError(err)) setEditError(err.response?.data?.detail || 'Failed to update')
+    },
+  })
+
   if (cats.isLoading) return <LoadingState />
   if (cats.isError) return <ErrorState onRetry={() => cats.refetch()} />
 
@@ -333,6 +348,19 @@ function CategoriesTab({ showAdd, onCloseAdd }: { showAdd: boolean; onCloseAdd: 
           loading={createMut.isPending}
           onSubmit={(data) => createMut.mutate(data)}
           onCancel={onCloseAdd}
+        />
+      )}
+
+      {editCat && (
+        <AddCategoryForm
+          key={editCat.id}
+          title="Edit Category"
+          submitLabel="Save"
+          initial={{ name: editCat.name, warranty_months: editCat.warranty_months ?? null }}
+          error={editError}
+          loading={updateMut.isPending}
+          onSubmit={(data) => updateMut.mutate({ id: editCat.id, data })}
+          onCancel={() => { setEditCat(null); setEditError('') }}
         />
       )}
 
@@ -377,6 +405,7 @@ function CategoriesTab({ showAdd, onCloseAdd }: { showAdd: boolean; onCloseAdd: 
                     <button
                       className="btn-secondary"
                       style={{ padding: '6px 12px', fontSize: '0.75rem' }}
+                      onClick={() => { setEditCat(cat); setEditError('') }}
                     >
                       <Edit2 size={12} />
                       Edit
@@ -397,19 +426,27 @@ function AddCategoryForm({
   loading,
   onSubmit,
   onCancel,
+  initial,
+  title = 'Add Category',
+  submitLabel = 'Create',
 }: {
   error: string
   loading: boolean
   onSubmit: (data: { name: string; warranty_months?: number | null }) => void
   onCancel: () => void
+  initial?: { name: string; warranty_months: number | null }
+  title?: string
+  submitLabel?: string
 }) {
-  const [name, setName] = useState('')
-  const [warranty, setWarranty] = useState('')
+  const [name, setName] = useState(initial?.name ?? '')
+  const [warranty, setWarranty] = useState(
+    initial?.warranty_months != null ? String(initial.warranty_months) : ''
+  )
 
   return (
     <div className="card animate-fade-in" style={{ padding: '20px 24px', marginBottom: 16 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <h3 style={{ fontSize: '0.9rem', fontWeight: 600 }}>Add Category</h3>
+        <h3 style={{ fontSize: '0.9rem', fontWeight: 600 }}>{title}</h3>
         <button onClick={onCancel} style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer' }}>
           <X size={18} />
         </button>
@@ -437,7 +474,7 @@ function AddCategoryForm({
           })}
           style={{ padding: '10px 20px' }}
         >
-          {loading ? '…' : 'Create'}
+          {loading ? '…' : submitLabel}
         </button>
       </div>
     </div>
