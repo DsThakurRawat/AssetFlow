@@ -52,7 +52,7 @@ interface MaintenanceRecord {
   resolved_at?: string;
 }
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8000/api";
 
 export default function AssetRegistry() {
   // State for Lists & Master Data
