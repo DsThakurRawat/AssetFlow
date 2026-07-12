@@ -24,7 +24,6 @@ class UserResponse(BaseModel):
     email: str
     role: UserRole
     department_id: Optional[int] = None
-    department_name: Optional[str] = None
     is_active: bool
 
     class Config:

@@ -214,41 +214,8 @@ def get_asset_detail(
             (id,)
         )
         history = cur.fetchall()
-
-        # Allocation history — holder is employee XOR department (Screen 4/5 "two lists")
-        cur.execute(
-            """
-            SELECT alloc.id,
-                   COALESCE(u.name, d.name) AS allocated_to,
-                   ab.name AS allocated_by_name,
-                   alloc.allocated_at, alloc.expected_return_date, alloc.returned_at,
-                   alloc.return_condition, alloc.notes
-            FROM allocations alloc
-            LEFT JOIN users u        ON alloc.employee_id  = u.id
-            LEFT JOIN departments d  ON alloc.department_id = d.id
-            LEFT JOIN users ab       ON alloc.allocated_by = ab.id
-            WHERE alloc.asset_id = %s
-            ORDER BY alloc.allocated_at DESC
-            """,
-            (id,),
-        )
-        allocation_history = cur.fetchall()
-
-        cur.execute(
-            """
-            SELECT id, issue, priority, status, technician_name, resolution,
-                   created_at, resolved_at
-            FROM maintenance_requests
-            WHERE asset_id = %s
-            ORDER BY created_at DESC
-            """,
-            (id,),
-        )
-        maintenance_history = cur.fetchall()
-
-        # Add history lists to the response body
+        
+        # Add history list to the response body
         response_data = dict(asset)
         response_data["history"] = history
-        response_data["allocation_history"] = allocation_history
-        response_data["maintenance_history"] = maintenance_history
         return response_data
