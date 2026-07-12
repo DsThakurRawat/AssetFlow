@@ -27,8 +27,8 @@ const variantMap: Record<PillVariant, { bg: string; color: string }> = {
     color: 'var(--color-pill-muted-text)',
   },
   purple: {
-    bg: 'rgba(139, 92, 246, 0.15)',
-    color: '#a78bfa',
+    bg: '#eee9f7',
+    color: '#6b4fa8',
   },
 }
 
@@ -93,14 +93,15 @@ export default function StatusPill({ label, variant }: StatusPillProps) {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        padding: '3px 10px',
+        padding: '3px 9px',
         borderRadius: 'var(--radius-full)',
         background: styles.bg,
         color: styles.color,
-        fontSize: '0.72rem',
+        fontFamily: 'var(--font-mono)',
+        fontSize: '0.64rem',
         fontWeight: 600,
-        letterSpacing: '0.02em',
-        textTransform: 'capitalize',
+        letterSpacing: '0.08em',
+        textTransform: 'uppercase',
         whiteSpace: 'nowrap',
         lineHeight: 1.5,
       }}
