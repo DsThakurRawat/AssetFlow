@@ -349,7 +349,7 @@ export default function AllocationTransfer() {
                   <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider block">Select Asset *</label>
                   <select
                     value={selectedAssetId}
-                    onChange={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       setSelectedAssetId(e.target.value);
                       setConflictInfo(null);
                     }}
@@ -401,7 +401,7 @@ export default function AllocationTransfer() {
                     <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider block">Select Employee *</label>
                     <select
                       value={targetUserId}
-                      onChange={(e) => setTargetUserId(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTargetUserId(e.target.value)}
                       className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white cursor-pointer"
                     >
                       <option value="">Choose Employee</option>
@@ -420,7 +420,7 @@ export default function AllocationTransfer() {
                     <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider block">Select Department *</label>
                     <select
                       value={targetDeptId}
-                      onChange={(e) => setTargetDeptId(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTargetDeptId(e.target.value)}
                       className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white cursor-pointer"
                     >
                       <option value="">Choose Department</option>
@@ -439,7 +439,7 @@ export default function AllocationTransfer() {
                   <input
                     type="date"
                     value={expectedReturnDate}
-                    onChange={(e) => setExpectedReturnDate(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setExpectedReturnDate(e.target.value)}
                     className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white"
                   />
                 </div>
@@ -451,7 +451,7 @@ export default function AllocationTransfer() {
                     rows={3}
                     placeholder="e.g. Assigned for Q3 project deployment"
                     value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNotes(e.target.value)}
                     className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-neutral-600"
                   />
                 </div>
@@ -568,7 +568,7 @@ export default function AllocationTransfer() {
                   rows={4}
                   placeholder="Explain why this asset needs to be reassigned..."
                   value={transferReason}
-                  onChange={(e) => setTransferReason(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTransferReason(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-neutral-600"
                 />
               </div>
