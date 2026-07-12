@@ -17,7 +17,10 @@ router = APIRouter(tags=["Organization Setup"])
 # =============================================================================
 
 @router.get("/departments", response_model=List[DepartmentResponse])
-def get_departments(db: Connection = Depends(get_db)):
+def get_departments(
+    current_user: dict = Depends(get_current_user),
+    db: Connection = Depends(get_db)
+):
     """Retrieve list of all departments."""
     with db.cursor() as cur:
         cur.execute(
@@ -179,7 +182,10 @@ def update_department(
 # =============================================================================
 
 @router.get("/categories", response_model=List[CategoryResponse])
-def get_categories(db: Connection = Depends(get_db)):
+def get_categories(
+    current_user: dict = Depends(get_current_user),
+    db: Connection = Depends(get_db)
+):
     """Retrieve list of all categories."""
     with db.cursor() as cur:
         cur.execute("SELECT id, name, warranty_months FROM categories ORDER BY name ASC")
