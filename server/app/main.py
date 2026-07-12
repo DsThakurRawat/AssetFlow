@@ -6,15 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from server.app.core.database import init_db_pool, close_db_pool
 from server.app.routers.auth import router as auth_router
 from server.app.routers.org import router as org_router
-from server.app.routers.assets import router as assets_router
-from server.app.routers.allocations import router as allocations_router
-from server.app.routers.transfers import router as transfers_router
-from server.app.routers.bookings import router as bookings_router
-from server.app.routers.maintenance import router as maintenance_router
-from server.app.routers.dashboard import router as dashboard_router
-from server.app.routers.notifications import router as notifications_router
-from server.app.routers.reports import router as reports_router
-from server.app.routers.audit import router as audit_router
 
 # Configure logging
 logging.basicConfig(
@@ -62,15 +53,6 @@ app.add_middleware(
 # Include routers
 app.include_router(auth_router, prefix="/api")
 app.include_router(org_router, prefix="/api")
-app.include_router(assets_router, prefix="/api")
-app.include_router(allocations_router, prefix="/api")
-app.include_router(transfers_router, prefix="/api")
-app.include_router(bookings_router, prefix="/api")
-app.include_router(maintenance_router, prefix="/api")
-app.include_router(dashboard_router, prefix="/api")
-app.include_router(notifications_router, prefix="/api")
-app.include_router(reports_router, prefix="/api")
-app.include_router(audit_router, prefix="/api")
 
 @app.get("/health")
 def health_check():

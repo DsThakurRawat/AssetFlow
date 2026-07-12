@@ -279,29 +279,25 @@ def get_users(
     current_user: dict = Depends(get_current_user),
     db: Connection = Depends(get_db)
 ):
-    """Retrieve user directory (with each user's department name). Any logged-in user."""
-    query = (
-        "SELECT u.id, u.name, u.email, u.role, u.department_id, u.is_active, "
-        "       d.name AS department_name "
-        "FROM users u LEFT JOIN departments d ON u.department_id = d.id"
-    )
+    """Retrieve user directory. Available to any logged-in user."""
+    query = "SELECT id, name, email, role, department_id, is_active FROM users"
     conditions = []
     params = []
-
+    
     if department_id is not None:
-        conditions.append("u.department_id = %s")
+        conditions.append("department_id = %s")
         params.append(department_id)
     if role is not None:
-        conditions.append("u.role = %s")
+        conditions.append("role = %s")
         params.append(role)
     if is_active is not None:
-        conditions.append("u.is_active = %s")
+        conditions.append("is_active = %s")
         params.append(is_active)
-
+        
     if conditions:
         query += " WHERE " + " AND ".join(conditions)
-
-    query += " ORDER BY u.name ASC"
+        
+    query += " ORDER BY name ASC"
     
     with db.cursor() as cur:
         cur.execute(query, tuple(params))
