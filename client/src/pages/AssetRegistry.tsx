@@ -290,7 +290,7 @@ export default function AssetRegistry() {
                 type="text"
                 placeholder="Search by tag, serial, or QR code.."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-neutral-500 transition-colors"
               />
             </div>
@@ -302,7 +302,7 @@ export default function AssetRegistry() {
               {/* Category Filter */}
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCategory(e.target.value)}
                 className="bg-[#1c222b] border border-[#2d3746] text-neutral-300 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer"
               >
                 <option value="">All Categories</option>
@@ -314,7 +314,7 @@ export default function AssetRegistry() {
               {/* Status Filter */}
               <select
                 value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedStatus(e.target.value)}
                 className="bg-[#1c222b] border border-[#2d3746] text-neutral-300 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer"
               >
                 <option value="">All Statuses</option>
@@ -329,7 +329,7 @@ export default function AssetRegistry() {
               {/* Department Filter */}
               <select
                 value={selectedDepartment}
-                onChange={(e) => setSelectedDepartment(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedDepartment(e.target.value)}
                 className="bg-[#1c222b] border border-[#2d3746] text-neutral-300 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer"
               >
                 <option value="">All Departments</option>
@@ -608,7 +608,7 @@ export default function AssetRegistry() {
                   type="text"
                   required
                   value={newAsset.name}
-                  onChange={(e) => setNewAsset({ ...newAsset, name: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({ ...newAsset, name: e.target.value })}
                   placeholder="e.g. Dell Latitude 7420"
                   className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-neutral-600"
                 />
@@ -621,7 +621,7 @@ export default function AssetRegistry() {
                   <select
                     required
                     value={newAsset.category_id}
-                    onChange={(e) => setNewAsset({ ...newAsset, category_id: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewAsset({ ...newAsset, category_id: e.target.value })}
                     className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white"
                   >
                     <option value="">Select Category</option>
@@ -637,7 +637,7 @@ export default function AssetRegistry() {
                   <input
                     type="text"
                     value={newAsset.serial_number}
-                    onChange={(e) => setNewAsset({ ...newAsset, serial_number: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({ ...newAsset, serial_number: e.target.value })}
                     placeholder="e.g. SN-82937402"
                     className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-neutral-600"
                   />
@@ -652,7 +652,7 @@ export default function AssetRegistry() {
                     type="number"
                     step="0.01"
                     value={newAsset.cost}
-                    onChange={(e) => setNewAsset({ ...newAsset, cost: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({ ...newAsset, cost: e.target.value })}
                     placeholder="e.g. 1200.00"
                     className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-neutral-600"
                   />
@@ -664,7 +664,7 @@ export default function AssetRegistry() {
                   <input
                     type="date"
                     value={newAsset.acquisition_date}
-                    onChange={(e) => setNewAsset({ ...newAsset, acquisition_date: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({ ...newAsset, acquisition_date: e.target.value })}
                     className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white"
                   />
                 </div>
@@ -676,7 +676,7 @@ export default function AssetRegistry() {
                   <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider block">Condition *</label>
                   <select
                     value={newAsset.condition}
-                    onChange={(e) => setNewAsset({ ...newAsset, condition: e.target.value as Asset["condition"] })}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewAsset({ ...newAsset, condition: e.target.value as Asset["condition"] })}
                     className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white"
                   >
                     <option value="new">New</option>
@@ -693,7 +693,7 @@ export default function AssetRegistry() {
                   <input
                     type="text"
                     value={newAsset.location}
-                    onChange={(e) => setNewAsset({ ...newAsset, location: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({ ...newAsset, location: e.target.value })}
                     placeholder="e.g. HQ Floor 3"
                     className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-neutral-600"
                   />
@@ -706,7 +706,7 @@ export default function AssetRegistry() {
                 <input
                   type="url"
                   value={newAsset.photo_url}
-                  onChange={(e) => setNewAsset({ ...newAsset, photo_url: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({ ...newAsset, photo_url: e.target.value })}
                   placeholder="https://example.com/asset-photo.jpg"
                   className="w-full px-3.5 py-2.5 bg-[#1c222b] border border-[#2d3746] rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-neutral-600"
                 />
@@ -718,7 +718,7 @@ export default function AssetRegistry() {
                   type="checkbox"
                   id="is_bookable"
                   checked={newAsset.is_bookable}
-                  onChange={(e) => setNewAsset({ ...newAsset, is_bookable: e.target.checked })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({ ...newAsset, is_bookable: e.target.checked })}
                   className="w-4.5 h-4.5 accent-emerald-500 cursor-pointer rounded"
                 />
                 <label htmlFor="is_bookable" className="text-sm font-semibold text-neutral-300 cursor-pointer select-none">
