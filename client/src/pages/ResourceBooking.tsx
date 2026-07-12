@@ -37,7 +37,7 @@ export default function ResourceBooking() {
   const [error, setError] = useState<string | null>(null);
 
   // Form State: New Booking
-  const [bookingDate, setBookingDate] = useState(new Date().toISOString().split("T")[0]);
+  const [bookingDate, setBookingDate] = useState(new Date().toLocaleDateString("en-CA"));
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("10:00");
   const [purpose, setPurpose] = useState("");
