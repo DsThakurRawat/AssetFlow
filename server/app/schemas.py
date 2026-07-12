@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 from datetime import date, datetime
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 class UserRole(str, Enum):
     ADMIN = "admin"
@@ -27,8 +27,7 @@ class UserResponse(BaseModel):
     department_name: Optional[str] = None
     is_active: bool
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class UserRoleUpdate(BaseModel):
     role: UserRole
@@ -56,8 +55,7 @@ class DepartmentResponse(BaseModel):
     head_name: Optional[str] = None
     parent_name: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class CategoryCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
@@ -72,8 +70,7 @@ class CategoryResponse(BaseModel):
     name: str
     warranty_months: Optional[int] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # =============================================================================
@@ -155,8 +152,7 @@ class AssetResponse(BaseModel):
     current_holder_name: Optional[str] = None
     current_holder_type: Optional[str] = None  # "employee", "department", or None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AllocationCreate(BaseModel):
@@ -183,8 +179,7 @@ class AllocationResponse(BaseModel):
     employee_name: Optional[str] = None
     department_name: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AllocationReturn(BaseModel):
@@ -216,8 +211,7 @@ class TransferResponse(BaseModel):
     to_department_name: Optional[str] = None
     requested_by_name: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class TransferDecision(BaseModel):
@@ -245,8 +239,7 @@ class BookingResponse(BaseModel):
     asset_tag: Optional[str] = None
     booked_by_name: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class MaintenanceCreate(BaseModel):
@@ -273,8 +266,7 @@ class MaintenanceResponse(BaseModel):
     asset_tag: Optional[str] = None
     raised_by_name: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class MaintenanceUpdate(BaseModel):

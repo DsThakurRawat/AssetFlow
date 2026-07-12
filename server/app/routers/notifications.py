@@ -67,10 +67,10 @@ def mark_read(
             (id, current_user["id"]),
         )
         row = cur.fetchone()
+        if not row:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Notification not found.",
+            )
         db.commit()
-    if not row:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Notification not found.",
-        )
     return row

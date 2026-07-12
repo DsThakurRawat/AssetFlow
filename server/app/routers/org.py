@@ -130,7 +130,7 @@ def update_department(
     
     try:
         with db.cursor() as cur:
-            cur.execute(f"SELECT id FROM departments WHERE id = %s", (id,))
+            cur.execute("SELECT id FROM departments WHERE id = %s", (id,))
             if not cur.fetchone():
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
@@ -158,6 +158,8 @@ def update_department(
                 (id,)
             )
             return cur.fetchone()
+    except HTTPException:
+        raise
     except UniqueViolation:
         db.rollback()
         raise HTTPException(
@@ -260,6 +262,8 @@ def update_category(
             category = cur.fetchone()
             db.commit()
             return category
+    except HTTPException:
+        raise
     except UniqueViolation:
         db.rollback()
         raise HTTPException(

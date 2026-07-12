@@ -148,32 +148,37 @@ export default function Dashboard() {
           <LoadingState message="Loading activity…" />
         ) : activity.isError ? (
           <ErrorState message="Could not load activity" onRetry={() => activity.refetch()} />
-        ) : !Array.isArray(activity.data) || activity.data.length === 0 ? (
-          <div style={{
-            padding: '24px 0',
-            textAlign: 'center',
-            color: 'var(--color-text-muted)',
-            fontSize: '0.82rem',
-          }}>
-            No recent activity
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {activity.data.map((notif, i) => (
-              <div
-                key={notif.id}
-                className="animate-fade-in"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                  padding: '12px 0',
-                  borderBottom: i < activity.data.length - 1
-                    ? '1px solid var(--color-border)'
-                    : 'none',
-                  animationDelay: `${i * 50}ms`,
-                }}
-              >
+        ) : (() => {
+          const activityItems = Array.isArray(activity.data) ? activity.data : []
+          if (activityItems.length === 0) {
+            return (
+              <div style={{
+                padding: '24px 0',
+                textAlign: 'center',
+                color: 'var(--color-text-muted)',
+                fontSize: '0.82rem',
+              }}>
+                No recent activity
+              </div>
+            )
+          }
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {activityItems.map((notif, i) => (
+                <div
+                  key={notif.id}
+                  className="animate-fade-in"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    padding: '12px 0',
+                    borderBottom: i < activityItems.length - 1
+                      ? '1px solid var(--color-border)'
+                      : 'none',
+                    animationDelay: `${i * 50}ms`,
+                  }}
+                >
                 {/* Type indicator dot */}
                 <div style={{
                   width: 8,
@@ -206,8 +211,9 @@ export default function Dashboard() {
                 </span>
               </div>
             ))}
-          </div>
-        )}
+            </div>
+          )
+        })()}
       </div>
     </div>
   )

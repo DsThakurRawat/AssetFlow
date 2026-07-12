@@ -31,10 +31,12 @@ def signup(user_in: UserSignup, response: Response, db: Connection = Depends(get
                 VALUES (%s, %s, %s, 'employee')
                 RETURNING id, name, email, role, department_id, is_active
                 """,
-                (user_in.name, user_in.email, pwd_hash)
+                (user_in.name, email_lower, pwd_hash)
             )
             user = cur.fetchone()
             db.commit()
+    except HTTPException:
+        raise
     except UniqueViolation:
         db.rollback()
         raise HTTPException(

@@ -1,4 +1,5 @@
 from typing import List, Optional
+from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from psycopg import Connection
 from server.app.core.database import get_db
@@ -150,8 +151,7 @@ def update_maintenance_request(
 
         # If transitioning to resolved, mark resolved_at
         if target_status == "resolved" and req["status"] != "resolved":
-            import datetime
-            resolved_at_val = datetime.datetime.now(datetime.timezone.utc)
+            resolved_at_val = datetime.now(timezone.utc)
 
         # Update the request
         cur.execute(
