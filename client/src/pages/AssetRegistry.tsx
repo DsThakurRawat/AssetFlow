@@ -143,22 +143,24 @@ export default function AssetRegistry() {
   }, [search, selectedCategory, selectedStatus, selectedDepartment]);
 
   // Fetch asset details & histories when an asset is selected
-  const handleSelectAsset = async (asset: Asset) => {
-    setSelectedAsset(asset);
-    setLoadingDetails(true);
-    try {
-      const response = await fetch(`${API_BASE}/assets/${asset.id}`);
-      if (response.ok) {
-        const data = await response.json();
-        setAllocationHistory(data.allocation_history || []);
-        setMaintenanceHistory(data.maintenance_history || []);
-      }
-    } catch (err) {
-      console.error("Failed to load asset details/history:", err);
-    } finally {
-      setLoadingDetails(false);
+const handleSelectAsset = async (asset: Asset) => {
+  setSelectedAsset(asset);
+  setLoadingDetails(true);
+  setAllocationHistory([]);
+  setMaintenanceHistory([]);
+  try {
+    const response = await fetch(API_BASE + "/assets/" + asset.id);
+    if (response.ok) {
+      const data = await response.json();
+      setAllocationHistory(data.allocation_history || []);
+      setMaintenanceHistory(data.maintenance_history || []);
     }
-  };
+  } catch (err) {
+    console.error("Failed to load asset details/history:", err);
+  } finally {
+    setLoadingDetails(false);
+  }
+};
 
   // Submit asset registration
   const handleRegisterAsset = async (e: React.FormEvent) => {
