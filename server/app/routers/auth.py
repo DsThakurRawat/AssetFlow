@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from psycopg import Connection
+from psycopg.errors import UniqueViolation
 from server.app.core.database import get_db
 from server.app.core.security import get_password_hash, verify_password, create_access_token
 from server.app.core.dependencies import get_current_user
@@ -12,27 +13,34 @@ def signup(user_in: UserSignup, response: Response, db: Connection = Depends(get
     """Sign up a new user. The role is hardcoded to 'employee'."""
     email_lower = user_in.email.lower()
     
-    with db.cursor() as cur:
-        # Check if user already exists
-        cur.execute("SELECT id FROM users WHERE lower(email) = %s", (email_lower,))
-        if cur.fetchone():
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="A user with this email address already exists."
+    try:
+        with db.cursor() as cur:
+            # Check if user already exists
+            cur.execute("SELECT id FROM users WHERE lower(email) = %s", (email_lower,))
+            if cur.fetchone():
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="A user with this email address already exists."
+                )
+            
+            # Hash password and save user
+            pwd_hash = get_password_hash(user_in.password)
+            cur.execute(
+                """
+                INSERT INTO users (name, email, password_hash, role)
+                VALUES (%s, %s, %s, 'employee')
+                RETURNING id, name, email, role, department_id, is_active
+                """,
+                (user_in.name, user_in.email, pwd_hash)
             )
-        
-        # Hash password and save user
-        pwd_hash = get_password_hash(user_in.password)
-        cur.execute(
-            """
-            INSERT INTO users (name, email, password_hash, role)
-            VALUES (%s, %s, %s, 'employee')
-            RETURNING id, name, email, role, department_id, is_active
-            """,
-            (user_in.name, user_in.email, pwd_hash)
+            user = cur.fetchone()
+            db.commit()
+    except UniqueViolation:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="A user with this email address already exists."
         )
-        user = cur.fetchone()
-        db.commit()
     
     # Generate JWT token
     token = create_access_token(data={"sub": str(user["id"])})
