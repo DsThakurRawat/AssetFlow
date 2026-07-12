@@ -30,7 +30,7 @@ export default function ResourceBooking() {
 
   // Selected state
   const [selectedAssetId, setSelectedAssetId] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+  const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString("en-CA"));
 
   // Loading & error states
   const [loading, setLoading] = useState(true);
